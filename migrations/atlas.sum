@@ -1,0 +1,5 @@
+h1:lYVxhKMQEbfMbbA5uBrF1o5DyVPwD96y193t5JseIsg=
+20260827093924_init_database.sql h1:1TuGFDegmVudLj/b/o/xzX6oXZujxlPKeyQ3Ou9oGWw=
+20260828231600_alter_timestamps_to_bigint.sql h1:nNy5A6VwoK8SdmP2HT9RG37ZeSuUStqpWRJiVvxHvrs=
+20260901170900_add_channels_and_members.sql h1:szAmQkn8+sgjHCT5X2hXHYwpOrFRiK4eKUw/9ne4LJk=
+20260901180000_add_messages_and_chat_support.sql h1:ligqe/XJ97hw/kSQTvAm4/VsbTVWksATdZdvnwlf3mQ=

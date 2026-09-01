@@ -1,0 +1,334 @@
+basePath: /
+definitions:
+  AppError:
+    properties:
+      code:
+        type: integer
+      error:
+        type: boolean
+      message:
+        type: string
+      trace_id:
+        type: string
+    type: object
+  LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  LoginResponse:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        type: integer
+      refresh_token:
+        type: string
+      token_type:
+        type: string
+    type: object
+  RegisterRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      full_name:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - first_name
+    - full_name
+    - last_name
+    - password
+    type: object
+  UpdateUserRequest:
+    properties:
+      first_name:
+        type: string
+      full_name:
+        type: string
+      last_name:
+        type: string
+      role:
+        $ref: '#/definitions/model.UserRole'
+      status:
+        $ref: '#/definitions/model.UserStatus'
+    required:
+    - first_name
+    - full_name
+    - last_name
+    - role
+    - status
+    type: object
+  UserResponse:
+    properties:
+      created_at:
+        type: integer
+      email:
+        type: string
+      first_name:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: string
+      last_login_at:
+        type: integer
+      last_name:
+        type: string
+      role:
+        $ref: '#/definitions/model.UserRole'
+      status:
+        $ref: '#/definitions/model.UserStatus'
+      updated_at:
+        type: integer
+    type: object
+  model.UserRole:
+    enum:
+    - admin
+    - user
+    - guest
+    type: string
+    x-enum-varnames:
+    - UserRoleAdmin
+    - UserRoleUser
+    - UserRoleGuest
+  model.UserStatus:
+    enum:
+    - active
+    - inactive
+    - pending
+    - blocked
+    - deleted
+    type: string
+    x-enum-varnames:
+    - UserStatusActive
+    - UserStatusInactive
+    - UserStatusPending
+    - UserStatusBlocked
+    - UserStatusDeleted
+host: localhost:8080
+info:
+  contact: {}
+  description: Book Hive REST API
+  title: Book Hive API
+  version: "1.0"
+paths:
+  /api/v1/user/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update a user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update user request
+        in: body
+        name: update_user_request
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/AppError'
+      security:
+      - AccessToken: []
+      summary: Update User
+      tags:
+      - User
+  /api/v1/user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login to the system
+      parameters:
+      - description: Login request
+        in: body
+        name: login_request
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/AppError'
+      summary: Login
+      tags:
+      - User
+  /api/v1/user/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout a user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/AppError'
+      security:
+      - AccessToken: []
+      summary: Logout
+      tags:
+      - User
+  /api/v1/user/me:
+    get:
+      consumes:
+      - application/json
+      description: Get a user by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/AppError'
+      security:
+      - AccessToken: []
+      summary: Get User
+      tags:
+      - User
+  /api/v1/user/refresh-token:
+    post:
+      consumes:
+      - application/json
+      description: Refresh a token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/AppError'
+      security:
+      - RefreshToken: []
+      summary: Refresh Token
+      tags:
+      - User
+  /api/v1/user/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: Register request
+        in: body
+        name: register_request
+        required: true
+        schema:
+          $ref: '#/definitions/RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/AppError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/AppError'
+      summary: Register
+      tags:
+      - User
+securityDefinitions:
+  AccessToken:
+    in: header
+    name: Authorization
+    type: apiKey
+  RefreshToken:
+    in: header
+    name: RefreshToken
+    type: apiKey
+swagger: "2.0"
