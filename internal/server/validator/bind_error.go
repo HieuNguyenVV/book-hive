@@ -17,7 +17,7 @@ func BindError(err error) appErrors.AppError {
 		for _, fieldErr := range validationErrs {
 			messages = append(messages, fieldMessage(fieldErr))
 		}
-		return appErrors.ErrInvalidArgument.Reform(strings.Join(messages, "; "))
+		return appErrors.ErrInvalidArgument.Reform("%s", strings.Join(messages, "; "))
 	}
 
 	return appErrors.ErrInvalidArgument.Reform("invalid request body")
