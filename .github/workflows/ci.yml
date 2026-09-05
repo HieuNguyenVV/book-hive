@@ -36,9 +36,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v4
        
-        - uses: actions/setup-go@v2
+        - uses: actions/setup-go@v5
           with:
             go-version: ${{ env.GO_VERSION }}
             cache: true
@@ -61,8 +61,8 @@ jobs:
     needs: lint
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
           cache: true
@@ -79,8 +79,8 @@ jobs:
     needs: test
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
           cache: true
@@ -91,7 +91,7 @@ jobs:
         run: |
           file app
           ls -lah app
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: app
           path: app
@@ -103,13 +103,13 @@ jobs:
     needs: lint
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
           cache: true
       - name: Security Scan
-        run: gosec ./...
+        run: go run github.com/securego/gosec/v2/cmd/gosec@latest ./...
       - name: Vulnerability Scan
         run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
